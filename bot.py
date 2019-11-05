@@ -37,9 +37,12 @@ def do_echo(update, context):
     if len(song_in_text) > 1:
       song = song_in_text[1].split('\n', 1)[0][:-7]
       confidence = recognition_result.split('confidence: ', 1)[1].split('\n', 1)[0][:-4]
-      answer = f'Result:\n{song}\nConfidence equals to {confidence} (from 1 to Infinity, the bigger the better).'
 
-      context.bot.send_message(chat_id = chat_id, text = answer)
+      if int(confidence) < 50:
+        context.bot.send_message(chat_id = chat_id, text = 'Sorry... I couldn\'t find anything. Please, try again.')
+      else:
+        answer = f'Result:\n\n{song}'
+        context.bot.send_message(chat_id = chat_id, text = answer)
     else:
       no_match = 'Sorry... I couldn\'t find anything. Please, try again.'
       context.bot.send_message(chat_id = chat_id, text = no_match)
